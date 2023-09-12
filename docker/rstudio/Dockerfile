@@ -9,8 +9,9 @@ RUN apt update && apt install -y \
     # Python
     python3 python3-pip
 
-# RInstall additional R packages (package manager)
-RUN R -e "install.packages(c('renv', 'languageserversetup', 'targets'))"
+# RInstall additional R packages 
+## package manager, plot viewer, syntax highlghtning, pipline tool
+RUN R -e "install.packages(c('renv', 'httpgd' 'languageserversetup', 'targets'))"
 RUN R -e "languageserversetup::languageserver_install()"
 RUN R -e "languageserversetup::languageserver_add_to_rprofile()"
 

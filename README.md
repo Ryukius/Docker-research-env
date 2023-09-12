@@ -34,6 +34,26 @@ docker volume create pip
      - ※僕の場合`Docker_project_data_storage`というフォルダ内に作成している
    - VS Code のターミナルから`dvc init && dvc remote add -d myremote gdrive://<ID>` を実
 
+## Docker image 作成時に追加インストール
+
+### VS Code Extention
+
+.devcontainer/devcontainer.json の "extensions" に記述
+
+- GitHub copilot: 
+- REditorSupport: 
+
+### R のパッケージ
+
+- `renv`: パッケージマネージャー
+- `languageserver`: Syntax highlightning とコード補完
+  - [`languageserversetup`](https://github.com/jozefhajnala/languageserversetup/tree/master) を用いてインストールしている
+- `httgd`: グラフをいい感じに出力してくれる
+- `targets`: 変更のない部分をスキップして計算を実行してくれるパイプラインツール
+  - [The {targets} R package user manual](https://books.ropensci.org/targets/)
+  - [R のパイプラインツール targets を使う意義](https://terashim.com/posts/targets-r-pipeline/)
+  - [R のパッケージ {targets} にコントリビュートした話](https://buildersbox.corp-sansan.com/entry/2022/12/17/000000)
+
 
 
 ## 参考
