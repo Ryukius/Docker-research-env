@@ -37,8 +37,7 @@
 	"remoteUser": "rstudio",
 	"extensions": [
 		"REditorSupport.r",
-        "GitHub.copilot",
-		"ms-azuretools.vscode-docker"
+        "GitHub.copilot"
 	],
     
 }
