@@ -1,0 +1,28 @@
+version: '4'
+
+services:
+    rstudio:
+      container_name: rstudio
+      build:
+        dockerfile: docker/rstudio/Dockerfile
+        context: .
+      environment:
+        - TZ=Asia/Tokyo
+        - DISABLE_AUTH=true
+        - PYTHONUSERBASE=/home/rstudio/.pip
+      volumes:
+        - type: bind
+          source: .
+          target: /home/rstudio/work
+        - type: volume
+          source: pip
+          target: /home/rstudio/.pip
+        - type: volume
+          source: renv
+          target: /home/rstudio/.cache/R/renv
+
+volumes:
+  renv:
+    external: true
+  pip:
+    external: true
