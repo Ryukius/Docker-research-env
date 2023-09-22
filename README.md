@@ -58,17 +58,33 @@ docker volume create pip
 
 ### 作業中に実施すること（作成者・共同研究者どちらも）
 
-- Rのパッケージを追加する際は、`renv::snapshot` を行い、使用したパッケージを保存する
-- 作業を始める前に、Dockerコンテナを立ち上げたら`git pull` `dvc pull` を実施し、他の共同研究者が作業した内容を取り込む
-- 作業が終わったら、GitHubへコードの変更をアップロードし、dvc でデータの変更をアップロードする
-  - GitHub
-    - `git add .`
-    - `git commit -m "<作業した内容のメモ>"`
-    - `git push`
-  - dvc
-    - `dvc push`
+#### ＜作業開始時＞
 
+- Rのパッケージを追加する際は、R terminalより`renv::snapshot()` コマンドを実行し、使用したパッケージを保存する
+- 作業を始める前に、Dockerコンテナを立ち上げたら`git pull`および `dvc pull` を実施し、他の共同研究者が作業した内容を取り込む
 
+#### ＜作業の終了前の保存＞
+
+- 作業が終わったら、GitHubへコードの変更をアップロードし、dvc でデータの変更をアップロードする。この作業は、VS code の bash ターミナルで行う。
+
+**データの更新がある場合**
+
+1. `dvc add data/`: 追加したデータファイルを記録
+2. `git add .`（全部のファイルの変更を追加）
+   -  新しいデータの記録も、`data.dvc` ファイルを通じて git でバージョン管理される
+   - ※一部のファイルのみ `git add <file名>` （1つのファイルを変更する場合）
+3. `git commit -m "<作業した内容のメモ>"`: 変更を記録
+4. `git push`: コードとファイルの変更をGitHub へ反映
+5. `dvc push`: データファイルをGoogle Driveへ反映
+
+**データの更新がない場合**
+
+- git のみの作業で良い
+
+#### ＜作業を終える＞
+
+- 作業終了時、Docker コンテナは停止しても良いが、削除しないほうが良さそう
+  - R パッケージのインストールなどが再度必要になる？
 
 ## Docker の内容説明
 
@@ -91,6 +107,13 @@ docker volume create pip
   - [The {targets} R package user manual](https://books.ropensci.org/targets/)
   - [R のパイプラインツール targets を使う意義](https://terashim.com/posts/targets-r-pipeline/)
   - [R のパッケージ {targets} にコントリビュートした話](https://buildersbox.corp-sansan.com/entry/2022/12/17/000000)
+
+## Stata を使うとき
+
+- `project.dta` は空のdtaファイルで、project 管理用。これをダブルクリックすることで、Stata が当該プロジェクトのディレクトリに移動してくれる。
+  - doファイル内のディレクトリ指定を相対パスで記述可能になる
+
+
 
 ## 参考
 
