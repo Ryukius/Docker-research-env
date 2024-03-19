@@ -36,7 +36,7 @@ docker volume create pip
      - ※僕の場合`Docker_project_data_storage`というフォルダ内に作成している
    - VS Code のターミナルから`dvc init && dvc remote add -d myremote gdrive://<ID>` を実
 
-### 共同研究者
+### 共同研究者のセットアップ手順
 
 - このテンプレートを使用する（初回だけ）Docker Volume を作成する。R と pip のパッケージの保管場所になる。
 
@@ -56,35 +56,58 @@ docker volume create pip
 
 
 
-### 作業中に実施すること（作成者・共同研究者どちらも）
+# 2. 作業中の手順
 
-#### ＜作業開始時＞
+## 2.1. 作業開始時
 
-- Rのパッケージを追加する際は、R terminalより`renv::snapshot()` コマンドを実行し、使用したパッケージを保存する
-- 作業を始める前に、Dockerコンテナを立ち上げたら`git pull`および `dvc pull` を実施し、他の共同研究者が作業した内容を取り込む
+1. レポジトリを VS Code で開く
 
-#### ＜作業の終了前の保存＞
+   - `shift + cmd + P` で `Dev Containers: Open Folder in Container...` から、このプロジェクト（`GS_merger_DID` ）選ぶ
+
+2. 他の共同研究者の作業を取り込む（bash ターミナルを使用）
+
+   1. `git pull`: コードを取り込む
+   2. `dvc pull`: データを取り込む
+
+   - 必ずこの順番で行う。`git pull` でデータファイルの更新情報 (`data.dvc`) をアップデートし、その情報をもとに `dvc pull` でデータファイルをダウンロードしている
+
+## 2.2. 作業の保存
 
 - 作業が終わったら、GitHubへコードの変更をアップロードし、dvc でデータの変更をアップロードする。この作業は、VS code の bash ターミナルで行う。
 
-**データの更新がある場合**
+### 2.2.1. Rのパッケージを追加（もしあれば）
+
+- 新たなRのパッケージを追加する際は、R terminalより`renv::snapshot()` コマンドを実行し、使用したパッケージを保存する
+  - これにより、共同研究者側にもパッケージ情報が反映される
+
+### 2.2.2. データの更新（もしあれば）
 
 1. `dvc add data/`: 追加したデータファイルを記録
-2. `git add .`（全部のファイルの変更を追加）
-   -  新しいデータの記録も、`data.dvc` ファイルを通じて git でバージョン管理される
-   - ※一部のファイルのみ `git add <file名>` （1つのファイルを変更する場合）
-3. `git commit -m "<作業した内容のメモ>"`: 変更を記録
-4. `git push`: コードとファイルの変更をGitHub へ反映
-5. `dvc push`: データファイルをGoogle Driveへ反映
+2. `dvc push`: データファイルをGoogle Driveへ反映
 
-**データの更新がない場合**
+### 2.2.3. コードの更新（必須）
 
-- git のみの作業で良い
+1. `git add .`（全部のファイルの変更を追加）
+   -  ※新しいデータの記録も、`data.dvc` ファイルを通じて git でバージョン管理される
+   -  ※一部のファイルのみ `git add <file名>` （1つのファイルを変更する場合）
+2. `git commit -m "<作業した内容のメモ>"`: 変更を記録
+3. `git push`: コードとファイルの変更をGitHub へ反映
 
-#### ＜作業を終える＞
+## 2.3. 作業を終える
 
-- 作業終了時、Docker コンテナは停止しても良いが、削除しないほうが良さそう
-  - R パッケージのインストールなどが再度必要になる？
+1. VS Codeの左下の青い部分「開発コンテナー: GS_merger_DID @ desktop-linux」と表示されている部分をクリック
+2. 上部に表示されるメニューから「リモート接続を終了する」を選ぶ
+   - これで、コンテナも停止され、CPUやメモリは使用されなくなる
+
+## トラブルシューティング
+
+- Q. VS Code 上でファイルが反映されない
+  - A. Docker コンテナを停止して VS Code を閉じてから、コンテナを再起動してください。
+
+- Q. VS Code で Docker コンテナを再起動すると、R terminal が表示されない
+
+  - A. R script から任意のコードを実行すると、再表示されるようになります
+
 
 ## Docker の内容説明
 
@@ -103,15 +126,12 @@ docker volume create pip
 - `languageserver`: Syntax highlightning とコード補完
   - [`languageserversetup`](https://github.com/jozefhajnala/languageserversetup/tree/master) を用いてインストールしている
 - `httgd`: VS Code で、グラフをいい感じに出力してくれる
-- `targets`: 変更のない部分をスキップして計算を実行してくれるパイプラインツール
-  - [The {targets} R package user manual](https://books.ropensci.org/targets/)
-  - [R のパイプラインツール targets を使う意義](https://terashim.com/posts/targets-r-pipeline/)
-  - [R のパッケージ {targets} にコントリビュートした話](https://buildersbox.corp-sansan.com/entry/2022/12/17/000000)
 
 ## Stata を使うとき
 
 - `project.dta` は空のdtaファイルで、project 管理用。これをダブルクリックすることで、Stata が当該プロジェクトのディレクトリに移動してくれる。
   - doファイル内のディレクトリ指定を相対パスで記述可能になる
+- なぜか、Dockerと紐付けたディレクトリでStataを使った後Docker環境を開くとバグるので、分けた方がいいかもしれない
 
 
 

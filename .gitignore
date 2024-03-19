@@ -1,8 +1,9 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-.DS_store
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+.DS_Store
+docker/.DS_Store
 
 # Ignore data but keep its structure
 
