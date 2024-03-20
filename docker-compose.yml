@@ -2,7 +2,7 @@ version: '4'
 
 services:
     rstudio:
-      container_name: rstudio
+      container_name: rstudio # rename the container
       build:
         dockerfile: docker/rstudio/Dockerfile
         context: .
